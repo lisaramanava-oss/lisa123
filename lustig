@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedPuls – Social Hub</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+--bg:#eeebe5;
+--card:#fff;
+--text:#111;
+--muted:#888;
+--g:#00A86B;
+--r:#e63946;
+--border:#dedad3;
+--tbg:#edf9f4;
+--tc:#007a50;
+--y:#f5c400;
+--dark:#1a1a1a;
+}
+
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:90px;}
+
+/* ── NAV ── */
+nav{background:#fff;border-bottom:2.5px solid #111;padding:12px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:300;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.lm{width:34px;height:34px;background:var(--g);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;font-weight:900;}
+.ln{font-weight:800;font-size:19px;letter-spacing:-.5px;color:#111;}
+.ln b{color:var(--g);}
+.npill{font-family:'IBM Plex Mono',monospace;font-size:9px;background:#111;color:#fff;padding:3px 8px;border-radius:3px;letter-spacing:.1em;}
+.nright{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);}
+
+/* ── HERO ── */
+.hero{background:var(--dark);color:#fff;padding:40px 20px 32px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(0,168,107,.15) 0%,transparent 70%);pointer-events:none;}
+.hk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--g);margin-bottom:14px;text-transform:uppercase;}
+.hero h1{font-size:clamp(26px,6vw,56px);font-weight:800;line-height:1.05;letter-spacing:-2px;max-width:600px;margin:0 auto 14px;}
+.hero h1 i{font-style:italic;color:var(--g);font-weight:400;}
+.hsub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#444;letter-spacing:.05em;}
+.hstats{display:flex;justify-content:center;gap:32px;margin-top:24px;flex-wrap:wrap;}
+.hstat{text-align:center;}
+.hstat-n{font-size:22px;font-weight:800;color:var(--g);}
+.hstat-l{font-family:'IBM Plex Mono',monospace;font-size:9px;color:#555;letter-spacing:.08em;margin-top:2px;}
+
+/* ── TICKER ── */
+.ticker{background:var(--g);color:#fff;padding:7px 0;overflow:hidden;white-space:nowrap;}
+.ticker-inner{display:inline-block;animation:tick 30s linear infinite;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;}
+@keyframes tick{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+
+/* ── FILTERS ── */
+.filters{background:#fff;border-bottom:1px solid var(--border);padding:11px 16px;display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;position:sticky;top:59px;z-index:200;}
+.filters::-webkit-scrollbar{display:none;}
+.fb{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:5px 13px;border:1.5px solid var(--border);border-radius:20px;background:#fff;color:var(--muted);cursor:pointer;white-space:nowrap;transition:.12s;}
+.fb:hover,.fb.active{background:#111;color:#fff;border-color:#111;}
+
+/* ── FEED ── */
+.feed{max-width:600px;margin:0 auto;padding:20px 12px;display:flex;flex-direction:column;gap:13px;}
+
+/* ── POST ── */
+.post{background:#fff;border:1.5px solid var(--border);border-radius:13px;overflow:hidden;transition:transform .15s,box-shadow .15s;animation:up .35s ease both;}
+.post:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,0,0,.09);}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* strips */
+.strip{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 16px;text-transform:uppercase;}
+.strip.gr{background:var(--g);color:#fff;}
+.strip.rd{background:var(--r);color:#fff;}
+.strip.yl{background:var(--y);color:#111;}
+.strip.dk{background:#111;color:var(--g);}
+
+/* header */
+.ph{padding:13px 15px 0;display:flex;align-items:flex-start;gap:10px;}
+.av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;border:2px solid var(--border);}
+.av.g{background:var(--g);}
+.av.r{background:var(--r);}
+.av.d{background:#222;}
+.av.b{background:#0055cc;}
+.av.o{background:#d97000;}
+.av.p{background:#7700cc;}
+.av.s{background:#006699;}
+.av.t{background:#1da1f2;}
+.av.pi{background:#cc0066;}
+.av.w{background:#25d366;}
+.pm{flex:1;min-width:0;}
+.pn{font-weight:700;font-size:13.5px;line-height:1.2;}
+.pr{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);margin-top:1px;}
+.ptag{font-family:'IBM Plex Mono',monospace;font-size:8.5px;padding:2px 7px;border:1px solid var(--border);border-radius:3px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;}
+
+/* body */
+.pb{padding:12px 15px;font-size:14.5px;line-height:1.62;color:var(--text);}
+.pb .st{text-decoration:line-through;color:var(--muted);}
+.pb .gn{color:var(--g);font-weight:700;}
+.pb .rd{color:var(--r);}
+.pb .bld{font-weight:700;}
+.pb a{color:var(--g);text-decoration:none;}
+
+/* meme visual */
+.mv{margin:0 15px 6px;border-radius:9px;overflow:hidden;border:1.5px solid var(--border);}
+.mbox{background:#111;padding:22px 18px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;min-height:120px;}
+.mt{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#555;letter-spacing:.12em;text-transform:uppercase;}
+.mm{font-size:clamp(16px,3.5vw,24px);font-weight:800;color:#fff;line-height:1.25;max-width:340px;}
+.mm .gg{color:var(--g);}
+.mm .yy{color:var(--y);}
+.mb{font-family:'IBM Plex Mono',monospace;font-size:9px;color:#3a3a3a;}
+
+/* organ grid */
+.obox{background:#0c1a10;padding:18px 16px;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 15px 6px;border-radius:9px;border:1.5px solid #1a3a22;}
+.org{background:#0a2416;border:1px solid #1a3a22;border-radius:7px;padding:11px 10px;text-align:center;}
+.oi{font-size:24px;line-height:1;margin-bottom:3px;}
+.on{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--g);letter-spacing:.1em;text-transform:uppercase;}
+.os{font-size:13px;font-weight:800;color:#fff;margin-top:2px;}
+.oc{font-size:9.5px;color:#444;margin-top:1px;}
+
+/* stat rows */
+.srow{background:var(--tbg);padding:13px 18px;display:grid;gap:10px;text-align:center;border-top:1px solid #d0ead8;}
+.srow.g2{grid-template-columns:1fr 1fr;}
+.srow.g3{grid-template-columns:1fr 1fr 1fr;}
+.srow.g4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.sn{font-size:20px;font-weight:800;color:var(--g);line-height:1;}
+.sl{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:2px;}
+
+/* reply */
+.rpl{margin:0 15px 8px;background:#f6f4f0;border-left:3px solid var(--g);padding:9px 12px;border-radius:0 7px 7px 0;font-size:13px;color:#555;font-style:italic;line-height:1.5;}
+.rpl-n{font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);font-weight:700;margin-bottom:3px;}
+
+/* tags */
+.tags{padding:0 15px 9px;display:flex;flex-wrap:wrap;gap:5px;}
+.tag{background:var(--tbg);color:var(--tc);font-size:9.5px;font-family:'IBM Plex Mono',monospace;padding:2px 8px;border-radius:3px;border:1px solid #b8e2cf;}
+
+/* engagement */
+.eng{padding:8px 15px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:16px;margin-top:2px;}
+.eb{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'IBM Plex Sans',sans-serif;padding:0;transition:.12s;user-select:none;}
+.eb:hover{color:#111;}
+.eb.liked{color:var(--r);}
+.ei{font-size:15px;transition:transform .15s;display:inline-block;}
+.ec{font-family:'IBM Plex Mono',monospace;font-size:10.5px;}
+.ml{margin-left:auto;}
+
+/* divider */
+.div{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.12em;display:flex;align-items:center;gap:10px;padding:2px 0;}
+.div::before,.div::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* quote card */
+.qcard{margin:0 15px 8px;background:#f6f4f0;border:1.5px solid var(--border);border-radius:9px;padding:11px 13px;font-size:13px;color:#555;line-height:1.5;}
+.qcard-name{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);font-weight:700;margin-bottom:4px;}
+
+/* poll */
+.poll{margin:0 15px 8px;display:flex;flex-direction:column;gap:7px;}
+.popt{background:#f6f4f0;border:1.5px solid var(--border);border-radius:7px;padding:9px 13px;font-size:13px;cursor:pointer;transition:.12s;position:relative;overflow:hidden;}
+.popt:hover{border-color:var(--g);}
+.popt .pbar{position:absolute;left:0;top:0;bottom:0;background:#edf9f4;z-index:0;transition:width .4s;}
+.popt span{position:relative;z-index:1;font-weight:500;}
+.popt .ppc{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);z-index:1;}
+
+/* ── BOTTOM BAR ── */
+.bot{position:fixed;bottom:0;left:0;right:0;background:#111;color:#fff;padding:11px 20px;display:flex;align-items:center;gap:12px;z-index:200;border-top:2.5px solid var(--g);}
+.bt{font-size:12px;line-height:1.4;}
+.bt strong{color:var(--g);}
+.bt span{color:#555;font-size:9px;font-family:'IBM Plex Mono',monospace;display:block;}
+.bcta{margin-left:auto;background:var(--g);color:#fff;border:none;padding:9px 18px;border-radius:7px;font-weight:700;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;}
+</style>
+
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="lm">♥</div>
+    <div class="ln">Med<b>Puls</b></div>
+  </a>
+  <span class="npill">SOCIAL HUB</span>
+  <div class="nright">KAI STREHLER STYLE™</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hk"></div>
+  <h1>Wir retten Leben.<br><i>Manchmal auch pünktlich.</i></h1>
+  <div class="hsub">// Kein Hochglanz. Kein Stethoskop-Stockfoto. Kein "Innovation trifft Menschlichkeit."</div>
+  <div class="hstats">
+    <div class="hstat"><div class="hstat-n">37 Bio.</div><div class="hstat-l">Körperzellen</div></div>
+    <div class="hstat"><div class="hstat-n">206</div><div class="hstat-l">Knochen. Wir kennen alle.</div></div>
+    <div class="hstat"><div class="hstat-n">0</div><div class="hstat-l">Datenlecks</div></div>
+    <div class="hstat"><div class="hstat-n">4</div><div class="hstat-l">Jahre Schlafmangel</div></div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <span class="ticker-inner">🟢 MedPuls live &nbsp;·&nbsp; Herz schlägt weiter &nbsp;·&nbsp; EKG in 11 Sek &nbsp;·&nbsp; CE zertifiziert (hat nur 4 Jahre gedauert) &nbsp;·&nbsp; 1.4M Messwerte/Tag &nbsp;·&nbsp; Fax ist abgestellt &nbsp;·&nbsp; Keine Learnings heute &nbsp;·&nbsp; Na gut, einen noch &nbsp;·&nbsp; 🟢 MedPuls live &nbsp;·&nbsp; 37 Billionen Zellen brauchen bessere Software &nbsp;·&nbsp; Scheiß auf Follower-Wachstum &nbsp;·&nbsp; n=1.800. Peer-reviewed. &nbsp;·&nbsp;</span>
+</div>
+
+<!-- FILTERS -->
+<div class="filters">
+  <button class="fb active" onclick="filt('all',this)">Alle</button>
+  <button class="fb" onclick="filt('linkedin',this)">LinkedIn</button>
+  <button class="fb" onclick="filt('twitter',this)">X / Twitter</button>
+  <button class="fb" onclick="filt('tiktok',this)">TikTok</button>
+  <button class="fb" onclick="filt('instagram',this)">Instagram</button>
+  <button class="fb" onclick="filt('selfirony',this)">Selbstironie</button>
+  <button class="fb" onclick="filt('beef',this)">Brand Beef</button>
+  <button class="fb" onclick="filt('body',this)">Körper</button>
+  <button class="fb" onclick="filt('real',this)">Echte Brands</button>
+  <button class="fb" onclick="filt('kurz',this)">Kurze Posts</button>
+</div>
+
+<!-- FEED -->
+<div class="feed" id="feed">
+
+<div class="div">HEUTE · 07:12</div>
+
+<article class="post" data-tags="twitter kurz selfirony">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH · Berlin</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Guten Morgen.<br><br>
+    Euer Herz hat heute Nacht schon 35.000 Mal geschlagen, während ihr geschlafen habt.<br><br>
+    Wir auch nicht.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">18.2K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">1.1K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">6.8K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">HEUTE · 09:03</div>
+<article class="post" data-tags="twitter beef real">
+  <div class="strip yl">🍎 Apple Watch Series 10 postet:</div>
+  <div class="ph">
+    <div class="av b">AW</div>
+    <div class="pm"><div class="pn">Apple Watch</div><div class="pr">@AppleWatch · Official</div></div>
+    <span class="ptag">X · Original</span>
+  </div>
+  <div class="pb">Dein Herz spricht. Die Apple Watch Series 10 hört zu. EKG, Herzfrequenz, Sauerstoffsättigung – alles in deiner Hand. ❤️‍🔥 #AppleWatch #Health</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">44.2K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<article class="post" data-tags="twitter beef real">
+  <div class="strip gr">💬 MedPuls antwortet · 4.1K Likes in 18 Min</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@AppleWatch schreibt:</div>Dein Herz spricht. Die Apple Watch hört zu.</div>
+  <div class="pb">
+    @AppleWatch Süß.<br><br>
+    Unser Gerät hört zu UND schickt dem behandelnden Kardiologen innerhalb von 40 Sekunden einen Befund.<br><br>
+    Aber schöne Uhr habt ihr. <span class="gn">🟢</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">4.122</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">512</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">2.011</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">HEUTE · 10:47</div>
+<article class="post" data-tags="twitter body selfirony">
+  <div class="strip gr">🔥 12.8K Retweets · Trending #MedTech</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Der menschliche Körper produziert täglich 2 Liter Speichel.<br>
+    Das Herz schlägt 100.000 Mal pro Tag.<br>
+    Die Leber macht 500 verschiedene Dinge gleichzeitig.<br>
+    Die Niere filtert 200 Liter Blut pro Tag.<br>
+    Das Blut legt dabei 96.000 km zurück.<br><br>
+    Und wir wundern uns, warum das Gesundheitssystem überlastet ist.<br><br>
+    <span class="bld">Euer Körper braucht bessere Software. Wir liefern sie.</span>
+  </div>
+  <div class="tags">
+    <span class="tag">#Körper</span><span class="tag">#MedTech</span><span class="tag">#NochFragen</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">14.4K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">892</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">12.8K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">HEUTE · 11:30</div>
+<article class="post" data-tags="linkedin body">
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin · 23 Mitarbeiter</div></div>
+    <span class="ptag">LinkedIn</span>
+  </div>
+  <div class="pb">Kurzes Status-Update zu eurem Körper heute Morgen:</div>
+  <div class="obox">
+    <div class="org"><div class="oi">❤️</div><div class="on">Herz</div><div class="os">100.000×/Tag</div><div class="oc">kein Urlaub seit Geburt</div></div>
+    <div class="org"><div class="oi">🫁</div><div class="on">Lunge</div><div class="os">20.000 Atemzüge</div><div class="oc">auch nachts. unbezahlt.</div></div>
+    <div class="org"><div class="oi">🧠</div><div class="on">Gehirn</div><div class="os">86 Mrd. Neuronen</div><div class="oc">davon 3 für Passwörter</div></div>
+    <div class="org"><div class="oi">🫀</div><div class="on">Niere</div><div class="os">200 L/Tag</div><div class="oc">ohne Feierabend. nie.</div></div>
+    <div class="org"><div class="oi">🦴</div><div class="on">Knochen</div><div class="os">206 Stück</div><div class="oc">härter als Beton. meistens.</div></div>
+    <div class="org"><div class="oi">🩸</div><div class="on">Blut</div><div class="os">96.000 km/Tag</div><div class="oc">kein Auto nötig</div></div>
+  </div>
+  <div class="pb" style="padding-top:6px;font-size:13.5px;">
+    Euer Körper schuftet mehr als ein Startup in der Seed-Phase.<br>
+    Ohne Investor. Ohne Pitch Deck. Ohne LinkedIn-Post darüber.<br><br>
+    <span class="bld">Wir sorgen dafür, dass er das noch lange tut.</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">26.3K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">1.8K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">HEUTE · 13:15</div>
+<article class="post" data-tags="tiktok body selfirony">
+  <div class="strip gr">🔥 Viral · 2.3M Views · #medtech #körper</div>
+  <div class="ph">
+    <div class="av g">@</div>
+    <div class="pm"><div class="pn">@medpuls.de</div><div class="pr">MedPuls auf TikTok · 312K Follower</div></div>
+    <span class="ptag">TikTok</span>
+  </div>
+  <div class="mv">
+    <div class="mbox" style="min-height:165px;gap:11px;">
+      <div class="mt">Fakten, die dein Arzt nicht auf TikTok postet:</div>
+      <div class="mm" style="font-size:14px;color:#ccc;text-align:left;max-width:100%;font-weight:500;line-height:1.8;">
+        🦴 Oberschenkelknochen ist <span class="gg">härter als Beton</span><br>
+        🩸 Blut legt täglich <span class="gg">96.000 km</span> zurück<br>
+        👅 Zähne heilen sich <span class="gg">nicht selbst</span> — alles andere tut's<br>
+        🧠 Gehirn fühlt keinen Schmerz — es <span class="gg">organisiert</span> ihn nur<br>
+        🫀 Herz erzeugt genug Druck, um <span class="gg">Blut 9 Meter weit</span> zu spritzen
+      </div>
+      <div class="mb">// Körper: 10/10. Software: ausbaufähig.</div>
+    </div>
+  </div>
+  <div class="pb" style="font-size:13px;color:var(--muted);">
+    Wir bauen die Software nach.<br>
+    <span class="bld" style="color:#111;">Weil 96.000 km/Tag das verdient haben.</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">421K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">14.2K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">88K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">GESTERN · 08:41</div>
+
+<article class="post" data-tags="linkedin selfirony">
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn</span>
+  </div>
+  <div class="mv">
+    <div class="mbox">
+      <div class="mt">MedTech-Zulassung Speedrun 2025:</div>
+      <div class="mm" style="font-size:14px;text-align:left;color:#bbb;font-weight:500;line-height:1.9;max-width:100%;">
+        ✅ Idee gehabt: <span class="gg">1 Tag</span><br>
+        ✅ Prototyp gebaut: <span class="gg">3 Monate</span><br>
+        ✅ Klinische Studie: <span class="gg">8 Monate</span><br>
+        ✅ MDR-Audit: <span class="yy">14 Monate</span><br>
+        ✅ CE-Zertifizierung: <span class="yy">26 Monate</span><br>
+        ✅ LinkedIn Post darüber: <span class="gg">4 Minuten</span>
+      </div>
+      <div class="mb">// der einzige Schritt, der beim ersten Versuch funktioniert hat</div>
+    </div>
+  </div>
+  <div class="pb">
+    Wir sind jetzt zertifiziert.<br>
+    Das Herz schlägt weiter.<br>
+    Wir auch. Irgendwie.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">34.1K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">3.2K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">GESTERN · 10:12</div>
+<article class="post" data-tags="twitter beef real">
+  <div class="ph">
+    <div class="av s">Dr</div>
+    <div class="pm"><div class="pn">Dräger</div><div class="pr">Medizin- und Sicherheitstechnik seit 1889 · Lübeck</div></div>
+    <span class="ptag">X · Original</span>
+  </div>
+  <div class="pb">Seit 1889 schützen, unterstützen und retten wir Leben. 135 Jahre Erfahrung. Kein Trend. Kein Hype. Nur Technik, die funktioniert. #Dräger #MedTech</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">2.1K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="twitter beef real">
+  <div class="strip gr">💬 MedPuls antwortet · 5.9K Likes</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@Draeger schreibt:</div>135 Jahre Erfahrung. Kein Trend. Kein Hype.</div>
+  <div class="pb">
+    @Draeger Respekt vor 135 Jahren.<br><br>
+    Wir gibt es seit 4 Jahren.<br>
+    In dieser Zeit hat sich die menschliche Lunge nicht verändert.<br>
+    Unser Algorithmus schon. Dreimal.<br><br>
+    Schönen Tag noch. <span class="gn">🟢</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">5.912</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">733</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">2.880</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">GESTERN · 12:00</div>
+<article class="post" data-tags="tiktok body selfirony">
+  <div class="ph">
+    <div class="av g">@</div>
+    <div class="pm"><div class="pn">@medpuls.de</div><div class="pr">MedPuls auf TikTok</div></div>
+    <span class="ptag">TikTok</span>
+  </div>
+  <div class="mv">
+    <div class="mbox">
+      <div class="mt">Dein Körper gerade:</div>
+      <div class="mm">37 Billionen Zellen.<br><span class="gg">Alle arbeiten.</span><br>Nur <span class="yy">eine</span> macht Probleme.</div>
+      <div class="mb">// wir nennen sie „die Bandscheibe"</div>
+    </div>
+  </div>
+  <div class="pb" style="font-size:13px;color:var(--muted);">
+    Unser Wirbelsäulen-Scan erkennt die eine Zelle, die Drama macht.<br>
+    14 Sekunden. Kein MRT-Wartezimmer. Kein Nummernzettel.<br><br>
+    <span class="bld" style="color:#111;">Terminiere das Drama frühzeitig.</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">143K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">4.1K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">38K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">GESTERN · 14:30</div>
+<article class="post" data-tags="twitter beef real">
+  <div class="ph">
+    <div class="av s">SH</div>
+    <div class="pm"><div class="pn">Siemens Healthineers</div><div class="pr">Pioneering Healthcare · @SiemensHealthineers</div></div>
+    <span class="ptag">X · Original</span>
+  </div>
+  <div class="pb">KI in der Radiologie: Unsere Systeme analysieren Tausende Bilder täglich und unterstützen Radiologen weltweit bei präzisen Diagnosen. Die Zukunft der Bildgebung ist jetzt. #AIinHealthcare</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">3.2K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="twitter beef real">
+  <div class="strip rd">🔥 Meistkommentierter Reply der Woche</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@SiemensHealthineers schreibt:</div>KI analysiert Tausende Bilder täglich. Die Zukunft ist jetzt.</div>
+  <div class="pb">
+    @SiemensHealthineers Tausende Bilder, ja.<br><br>
+    Unser System analysiert das Bild und schreibt direkt den Arztbrief.<br>
+    In der Sprache des Patienten.<br>
+    In 11 Sekunden.<br><br>
+    Wir sind Fans eurer Hardware. <span class="gn">🟢</span><br>
+    Habt ihr auch Fans unserer Software?
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">6.811</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">934</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">3.440</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">GESTERN · 16:02</div>
+<article class="post" data-tags="twitter kurz selfirony">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Ich habe heute nichts geleistet.<br><br>
+    Das Herz meiner Testpatientin schon.<br>
+    72 Mal pro Minute. Den ganzen Tag.<br><br>
+    Keine Learnings. Nur Ehrfurcht.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">9.112</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">334</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">4.021</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">DIESE WOCHE · MONTAG</div>
+
+<article class="post" data-tags="linkedin beef real">
+  <div class="strip yl">📋 Gematik postet über E-Rezept-Meilenstein</div>
+  <div class="ph">
+    <div class="av p">Ge</div>
+    <div class="pm"><div class="pn">Gematik GmbH</div><div class="pr">Digitale Gesundheitsinfrastruktur · Berlin</div></div>
+    <span class="ptag">LinkedIn · Original</span>
+  </div>
+  <div class="pb">Meilenstein! Im ersten Halbjahr 2024 wurden über 244 Millionen E-Rezepte eingelöst. Die Digitalisierung des Gesundheitswesens schreitet voran! 🚀 #eRezept #DiGA</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">4.4K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="linkedin beef real">
+  <div class="strip gr">💬 MedPuls kommentiert · 18.3K Likes</div>
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@Gematik schreibt:</div>244 Millionen E-Rezepte. Die Digitalisierung schreitet voran!</div>
+  <div class="pb">
+    Super, @Gematik.<br><br>
+    244 Millionen Rezepte digital.<br>
+    Gleichzeitig:<br>
+    — Befunde noch per <span class="st">E-Mail</span> Fax.<br>
+    — Diagnosen noch per <span class="st">WhatsApp</span> Brief.<br>
+    — Patientenakte noch im <span class="st">Cloud</span> Leitz-Ordner.<br><br>
+    Wir freuen uns über jeden Schritt. Wirklich.<br><br>
+    <span class="bld">PS: Wir integrieren alle drei. Falls Interesse.</span> <span class="gn">🟢</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">18.3K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">2.1K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">DIESE WOCHE · DIENSTAG</div>
+<article class="post" data-tags="twitter beef real">
+  <div class="ph">
+    <div class="av o">BB</div>
+    <div class="pm"><div class="pn">B. Braun</div><div class="pr">Sharing Expertise · seit 1839</div></div>
+    <span class="ptag">X · Original</span>
+  </div>
+  <div class="pb">Innovation beginnt mit Vertrauen. Über 64.000 Mitarbeitende in 64 Ländern teilen täglich ihr Wissen. #SharingExpertise #BBraun</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">1.8K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="twitter beef real">
+  <div class="strip gr">💬 Die freundlichste Antwort des Monats</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@BBraun schreibt:</div>64.000 Menschen teilen täglich ihr Wissen.</div>
+  <div class="pb">
+    @BBraun Wir sind 23 Leute in Berlin-Mitte.<br><br>
+    Aber unser Algorithmus hat auch gut geschlafen.<br><br>
+    Weiter so, ehrlich. <span class="gn">🤝</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">7.033</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">512</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">3.211</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">DIESE WOCHE · MITTWOCH</div>
+<article class="post" data-tags="twitter body selfirony">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Fun Fact:<br>
+    — Niere filtert täglich 200 Liter Blut<br>
+    — Magen produziert alle 2 Wochen neue Schleimhaut, damit er sich nicht selbst verdaut<br>
+    — Leber regeneriert sich komplett innerhalb eines Jahres<br>
+    — Haut erneuert sich alle 27 Tage komplett<br><br>
+    Und ihr geht nicht zur Vorsorge.<br><br>
+    Okay.
+  </div>
+  <div class="tags">
+    <span class="tag">#Vorsorge</span><span class="tag">#IhrWisst</span><span class="tag">#MedPuls</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">16.9K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">1.4K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">7.330</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<article class="post" data-tags="tiktok selfirony">
+  <div class="ph">
+    <div class="av g">@</div>
+    <div class="pm"><div class="pn">@medpuls.de</div><div class="pr">MedPuls auf TikTok · 312K Follower</div></div>
+    <span class="ptag">TikTok</span>
+  </div>
+  <div class="mv">
+    <div class="mbox" style="background:#0d0d0d;min-height:160px;">
+      <div class="mt">POV:</div>
+      <div class="mm" style="font-size:20px;">du bist <span class="gg">Krankenpfleger</span><br>und hast gerade<br>unsere App installiert</div>
+      <div class="mb">[ Ton: dramatic bass drop ]</div>
+    </div>
+  </div>
+  <div class="pb" style="font-size:13px;color:var(--muted);">
+    📲 Vitalwerte in Echtzeit. Kein Papierkram. Kein Fax.<br>
+    Keine Learnings heute. Nur gute Zahlen.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">92.3K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">1.8K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">22K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">DIESE WOCHE · DONNERSTAG</div>
+<article class="post" data-tags="linkedin selfirony kurz">
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn</span>
+  </div>
+  <div class="pb">Scheiß auf Follower-Wachstum.<br><br>Was wirklich zählt:</div>
+  <div class="srow g4">
+    <div><div class="sn">1.4M</div><div class="sl">Messwerte/Tag</div></div>
+    <div><div class="sn">312</div><div class="sl">Kliniken aktiv</div></div>
+    <div><div class="sn">0</div><div class="sl">Datenlecks</div></div>
+    <div><div class="sn">4</div><div class="sl">Jahre Burnout</div></div>
+  </div>
+  <div class="srow g3" style="background:#f0ede8;border-top:1px solid var(--border);">
+    <div><div class="sn">206</div><div class="sl">Knochen (alle bekannt)</div></div>
+    <div><div class="sn">37Bio</div><div class="sl">Körperzellen</div></div>
+    <div><div class="sn">1</div><div class="sl">App für alles</div></div>
+  </div>
+  <div class="pb" style="font-size:13px;color:var(--muted);padding-top:6px;">Guten Morgen. Euer Körper hat bereits gearbeitet.</div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">28.4K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">2.0K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<article class="post" data-tags="tiktok selfirony">
+  <div class="ph">
+    <div class="av g">@</div>
+    <div class="pm"><div class="pn">@medpuls.de</div><div class="pr">MedPuls auf TikTok</div></div>
+    <span class="ptag">TikTok</span>
+  </div>
+  <div class="mv">
+    <div class="mbox">
+      <div class="mt">MedTech-Marketing bisher:</div>
+      <div class="mm" style="font-size:16px;color:#777;font-weight:400;font-style:italic;">"Innovation trifft Menschlichkeit.<br>Vertrauen. Exzellenz. Qualität.<br>Der Mensch im Mittelpunkt."</div>
+      <div style="font-size:30px;margin-top:4px;">😴</div>
+    </div>
+  </div>
+  <div class="pb">
+    Wir machen das anders.<br>
+    Ob's besser ist, sagt ihr uns.<br><br>
+    <span style="color:var(--muted);font-size:13px;">(Spoiler: Laut Kommentaren: ja.)</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">48.2K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">2.1K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">11K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">DIESE WOCHE · FREITAG</div>
+<article class="post" data-tags="twitter selfirony body">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Poll</span>
+  </div>
+  <div class="pb">
+    Wichtige Frage für die Forschung.<br><br>
+    Wann habt ihr zuletzt euren Blutdruck gemessen?
+  </div>
+  <div class="poll">
+    <div class="popt" onclick="vote(this,71)"><div class="pbar" style="width:11%"></div><span>Heute 🟢</span><span class="ppc">11%</span></div>
+    <div class="popt" onclick="vote(this,71)"><div class="pbar" style="width:18%"></div><span>Diese Woche</span><span class="ppc">18%</span></div>
+    <div class="popt" onclick="vote(this,71)"><div class="pbar" style="width:24%"></div><span>Letztes Jahr beim Arzt</span><span class="ppc">24%</span></div>
+    <div class="popt" onclick="vote(this,71)"><div class="pbar" style="width:47%"></div><span>Blutdruck was? 💀</span><span class="ppc">47%</span></div>
+  </div>
+  <div class="pb" style="font-size:12px;color:var(--muted);padding-top:0;">71.2K Stimmen · 18 Std. verbleibend</div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">8.8K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">2.3K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<article class="post" data-tags="twitter beef">
+  <div class="ph">
+    <div class="av b">PS</div>
+    <div class="pm"><div class="pn">PharmaSchnell AG</div><div class="pr">Leading Healthcare Innovation</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@MedPuls hat geschrieben:</div>Unser Sensor misst Blutzucker ohne Nadel.</div>
+  <div class="pb">@MedPuls Das behaupten wir auch seit 2019. Zeigt her die Daten. 😅</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">211</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="twitter beef">
+  <div class="strip gr">🔥 MedPuls antwortet · 2.1K Likes in 40 Min</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="pb">
+    @PharmaSchnell Daten? <a href="#">medpuls.de/studie2024</a><br><br>
+    n=1.800. Peer-reviewed. Veröffentlicht letzten Dienstag.<br><br>
+    Ihr seid herzlich eingeladen. <span class="gn">🟢</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">2.109</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">198</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">891</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">LETZTE WOCHE</div>
+
+<article class="post" data-tags="twitter beef selfirony">
+  <div class="ph">
+    <div class="av r">Hr</div>
+    <div class="pm"><div class="pn">@HermannD_Arzt</div><div class="pr">Facharzt für Allgemeinmedizin · sehr online</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="pb">@MedPuls Ihr solltet euer Budget lieber in klinische Studien stecken als in lustige Tweets. MedTech braucht Evidenz, keine Memes.</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">88</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="twitter beef selfirony">
+  <div class="strip gr">💬 2.1K Likes · Meistgeklickte Antwort</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="pb">
+    @HermannD_Arzt n=1.800. Peer-reviewed. Lancet Digital Health, März 2025.<br><br>
+    Link in Bio.<br><br>
+    Wenn mein Team und ich die Studien schreiben würden, wäre das vermutlich auch keine gute Idee gewesen.<br><br>
+    Gute Evidenz haben wir trotzdem. <span class="gn">🟢</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">2.144</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">198</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">1.021</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<article class="post" data-tags="instagram body selfirony">
+  <div class="ph">
+    <div class="av pi">@</div>
+    <div class="pm"><div class="pn">@medpuls.official</div><div class="pr">MedPuls auf Instagram · 89K Follower</div></div>
+    <span class="ptag">Instagram</span>
+  </div>
+  <div class="mv">
+    <div class="mbox" style="min-height:200px;background:linear-gradient(135deg,#0a1a0f,#1a3a22);">
+      <div class="mt">Dein Körper in Zahlen</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:320px;text-align:left;">
+        <div style="border-left:2px solid var(--g);padding-left:10px;"><div style="font-size:20px;font-weight:800;color:#fff;">60.000</div><div style="font-size:9px;color:#555;font-family:'IBM Plex Mono',monospace;margin-top:2px;">KM BLUTGEFÄSSE</div></div>
+        <div style="border-left:2px solid var(--g);padding-left:10px;"><div style="font-size:20px;font-weight:800;color:#fff;">2L</div><div style="font-size:9px;color:#555;font-family:'IBM Plex Mono',monospace;margin-top:2px;">SPEICHEL PRO TAG</div></div>
+        <div style="border-left:2px solid var(--g);padding-left:10px;"><div style="font-size:20px;font-weight:800;color:#fff;">500</div><div style="font-size:9px;color:#555;font-family:'IBM Plex Mono',monospace;margin-top:2px;">LEBER-FUNKTIONEN</div></div>
+        <div style="border-left:2px solid var(--g);padding-left:10px;"><div style="font-size:20px;font-weight:800;color:#fff;">27</div><div style="font-size:9px;color:#555;font-family:'IBM Plex Mono',monospace;margin-top:2px;">TAGE NEUE HAUT</div></div>
+      </div>
+      <div class="mb" style="margin-top:8px;">// Das komplexeste Objekt im bekannten Universum.</div>
+    </div>
+  </div>
+  <div class="pb" style="font-size:13.5px;">
+    Wir bauen das Betriebssystem dafür.<br><br>
+    Doppeltap wenn ihr auch glaubt, dass euer Körper bessere Software verdient. 💚
+  </div>
+  <div class="tags">
+    <span class="tag">#MedTech</span><span class="tag">#DigitalHealth</span><span class="tag">#Körper</span><span class="tag">#MedPuls</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">34.1K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">1.2K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<article class="post" data-tags="twitter body kurz selfirony">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Das Gehirn nennt sich selbst „Gehirn".<br><br>
+    Niemand sonst hat das überprüft.<br><br>
+    Wir arbeiten daran.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">22.4K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">1.8K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">9.3K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<article class="post" data-tags="linkedin selfirony">
+  <div class="strip dk">🧵 Thread · 8 Posts · 41K Reactions</div>
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn · Thread</span>
+  </div>
+  <div class="pb">
+    Was man uns nicht sagt, wenn man ein MedTech-Startup gründet. Ein Thread. 🧵<br><br>
+    <span class="bld">1/8</span> Die Idee dauert 1 Tag. Die Zulassung 4 Jahre. Man fängt trotzdem an.
+  </div>
+  <div class="qcard">
+    <div class="qcard-name">2/8</div>
+    Euer erstes klinisches Feedback: „Das Gerät ist zu klein. Ärzte vertrauen kleinen Geräten nicht." Wir haben das Gerät größer gemacht. Es ist jetzt 3cm größer. Gleiches Feedback.
+  </div>
+  <div class="qcard">
+    <div class="qcard-name">3/8</div>
+    MDR-Audit, Tag 1: Der Prüfer fragt nach Dokument 47b. Wir haben 47a und 47c. 47b existiert in unserer Welt nicht. Es dauert 3 Wochen, bis wir verstehen, dass es das sollte.
+  </div>
+  <div class="qcard">
+    <div class="qcard-name">8/8</div>
+    Heute: 312 Kliniken. 1.4M Messwerte pro Tag. 0 Datenlecks. 4 Jahre älter.<br><br>Keine Learnings. Nur Demut.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">41.2K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">3.8K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<div class="div">LETZTE WOCHE · FREITAG · 22:44</div>
+<article class="post" data-tags="twitter kurz selfirony">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Euer Körper ist das komplexeste Objekt im bekannten Universum.<br><br>
+    Wir bauen das Update dafür.<br><br>
+    Na gut, einen noch.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">19.3K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">811</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">8.200</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<article class="post" data-tags="twitter kurz selfirony">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Ich habe heute nichts geleistet.<br><br>
+    Unser Produkt schon.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">7.441</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">201</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">3.112</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+
+<!-- ─── NEU: BRAND BEEF + SELBSTIRONIE ─── -->
+
+<div class="div">DIESE WOCHE · MONTAG FRÜH</div>
+
+<!-- Philips Beef -->
+<article class="post" data-tags="linkedin beef real">
+  <div class="ph">
+    <div class="av b">Ph</div>
+    <div class="pm"><div class="pn">Philips</div><div class="pr">Health Technology · Amsterdam · 70.000+ Mitarbeiter</div></div>
+    <span class="ptag">LinkedIn · Original</span>
+  </div>
+  <div class="pb">The future of healthcare is connected, intelligent and personal. At Philips, we improve 2.5 billion lives per year through meaningful innovation. #HealthTech #Philips</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">12.1K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="linkedin beef real">
+  <div class="strip gr">💬 MedPuls kommentiert · 9.2K Likes</div>
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@Philips schreibt:</div>We improve 2.5 billion lives per year.</div>
+  <div class="pb">
+    2,5 Milliarden. Respekt, @Philips.<br><br>
+    Wir sind bei 312 Kliniken.<br>
+    Aber die bekommen ihre Befunde in 11 Sekunden.<br>
+    Nicht in 11 Monaten Implementierungszeit.<br><br>
+    Wir sind Fans. Wirklich. <span class="gn">🟢</span><br>
+    <span style="color:var(--muted);font-size:13px;">PS: Falls ihr eine schlanke Softwareschicht braucht – ihr wisst wo wir sind.</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">9.2K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">1.1K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Fresenius Beef -->
+<div class="div">DIESE WOCHE · DIENSTAG</div>
+<article class="post" data-tags="twitter beef real">
+  <div class="ph">
+    <div class="av o">Fr</div>
+    <div class="pm"><div class="pn">Fresenius</div><div class="pr">Gesundheitskonzern · Bad Homburg · seit 1912</div></div>
+    <span class="ptag">X · Original</span>
+  </div>
+  <div class="pb">Wir versorgen täglich Millionen Patienten weltweit – in Kliniken, zuhause, überall. Gesundheit ist unser Auftrag. #Fresenius #Healthcare</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">3.3K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="twitter beef real">
+  <div class="strip gr">💬 MedPuls antwortet</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@Fresenius schreibt:</div>Gesundheit ist unser Auftrag.</div>
+  <div class="pb">
+    @Fresenius Unser auch.<br><br>
+    Ihr habt 300.000 Mitarbeiter.<br>
+    Wir haben 23.<br>
+    Und einen Algorithmus, der nicht krank wird.<br><br>
+    Kollaboration? <span class="gn">🟢</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">6.4K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">489</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">2.9K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Roche Beef -->
+<div class="div">DIESE WOCHE · MITTWOCH</div>
+<article class="post" data-tags="twitter beef real">
+  <div class="ph">
+    <div class="av r">Ro</div>
+    <div class="pm"><div class="pn">Roche</div><div class="pr">Doing now what patients need next · Basel</div></div>
+    <span class="ptag">X · Original</span>
+  </div>
+  <div class="pb">Diagnostics saves lives. Early detection changes outcomes. Our lab solutions process millions of samples daily — because every result matters. #Roche #Diagnostics</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">5.8K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="twitter beef real">
+  <div class="strip rd">🔥 7.3K Likes · Screenshot geht viral</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@Roche schreibt:</div>Every result matters.</div>
+  <div class="pb">
+    @Roche Einverstanden.<br><br>
+    Deshalb schicken wir das Ergebnis auch direkt an den Arzt.<br>
+    Ohne Labordrucker. Ohne Fax. Ohne Umweg.<br><br>
+    Euer Sample kommt rein. Unser Befund geht raus.<br>
+    11 Sekunden.<br><br>
+    Wir mögen euch. <span class="gn">🟢</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">7.3K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">612</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">3.8K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Medtronic Beef -->
+<div class="div">DIESE WOCHE · DONNERSTAG</div>
+<article class="post" data-tags="linkedin beef real">
+  <div class="ph">
+    <div class="av p">Me</div>
+    <div class="pm"><div class="pn">Medtronic</div><div class="pr">Engineering the extraordinary · Dublin</div></div>
+    <span class="ptag">LinkedIn · Original</span>
+  </div>
+  <div class="pb">Engineering the extraordinary. Our 90,000 employees are united by one mission: to alleviate pain, restore health, and extend life. #Medtronic #MedTech</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">8.9K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="linkedin beef real">
+  <div class="strip gr">💬 MedPuls kommentiert · 11.4K Likes</div>
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@Medtronic schreibt:</div>90,000 employees. One mission.</div>
+  <div class="pb">
+    90.000 Menschen. Eine Mission. Großartig, @Medtronic.<br><br>
+    Wir sind 23 Menschen. Eine App.<br>
+    Und unser Schrittmacher-Monitoring-Modul läuft seit 14 Monaten ohne Ausfall.<br><br>
+    Nicht außerordentlich.<br>
+    Nur zuverlässig. <span class="gn">🟢</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">11.4K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">934</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Selbstironie: Investor-Pitch -->
+<div class="div">LETZTE WOCHE · DIENSTAG</div>
+<article class="post" data-tags="linkedin selfirony">
+  <div class="strip dk">💸 Startup-Geständnis · 38K Reactions</div>
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn</span>
+  </div>
+  <div class="mv">
+    <div class="mbox">
+      <div class="mt">Unser erster Investor-Pitch:</div>
+      <div class="mm" style="font-size:13px;color:#bbb;font-weight:500;line-height:2;text-align:left;max-width:100%;">
+        Slide 1: <span class="gg">„Wir revolutionieren Healthcare."</span><br>
+        Slide 2: <span class="yy">Marktgröße: 500 Mrd. $</span><br>
+        Slide 3: <span class="gg">„Unser Team ist einzigartig."</span><br>
+        Slide 4: <span class="yy">Technologie: „proprietär"</span><br>
+        Slide 5: <span class="gg">„Wir brauchen nur 2% vom Markt."</span><br>
+        Slide 6–14: <span style="color:#555;">niemand hat sie aufgemacht</span>
+      </div>
+      <div class="mb">// Ergebnis: kein Term Sheet. Aber Kaffee gratis.</div>
+    </div>
+  </div>
+  <div class="pb">
+    Heute: 312 Kliniken. Echter Umsatz. Kein Pitch Deck mehr nötig.<br><br>
+    <span class="bld">Die beste Folie ist ein funktionierendes Produkt.</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">38.1K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">4.2K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Selbstironie: Hiring -->
+<article class="post" data-tags="twitter selfirony kurz">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Wir suchen einen Senior Developer.<br><br>
+    Anforderungen:<br>
+    — 10 Jahre Erfahrung (Firma ist 4 Jahre alt)<br>
+    — Leidenschaft für Healthcare<br>
+    — Versteht Fax als „Legacy-System"<br>
+    — Hält 2 Liter Kaffee pro Tag für normal<br><br>
+    Wir zahlen fair. Versprochen.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">21.7K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">3.1K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">9.8K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Selbstironie: Retro -->
+<article class="post" data-tags="linkedin selfirony">
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn</span>
+  </div>
+  <div class="pb">
+    Unser letztes Sprint-Retro. Echte Zitate:<br><br>
+    ✅ „Was lief gut?" — Die Kaffeemaschine.<br>
+    ❌ „Was lief schlecht?" — Der MDR-Audit. Wie immer.<br>
+    💡 „Was verbessern wir?" — Die Antwort auf diese Frage.<br><br>
+    Nächste Woche gleiches Retro.<br>
+    <span class="bld">Das Herz schlägt weiter. Wir auch.</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">19.3K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">2.0K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Selbstironie: Nacht-Deploy -->
+<article class="post" data-tags="twitter selfirony kurz">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH · 02:47 Uhr</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Wir deployen gerade ein Update.<br><br>
+    312 Kliniken schlafen.<br>
+    Wir nicht.<br><br>
+    Das Herz macht weiter. Wir auch.<br>
+    Irgendwie.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">14.8K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">988</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">6.1K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Abbott Beef -->
+<div class="div">LETZTE WOCHE · MITTWOCH</div>
+<article class="post" data-tags="twitter beef real">
+  <div class="ph">
+    <div class="av b">Ab</div>
+    <div class="pm"><div class="pn">Abbott</div><div class="pr">Life. To the Fullest. · Chicago</div></div>
+    <span class="ptag">X · Original</span>
+  </div>
+  <div class="pb">Our FreeStyle Libre system has transformed diabetes management for millions worldwide. Continuous glucose monitoring — no fingersticks needed. #Abbott #DiabetesCare</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">9.4K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="twitter beef real">
+  <div class="strip gr">💬 MedPuls antwortet · 8.1K Likes</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@Abbott schreibt:</div>No fingersticks needed.</div>
+  <div class="pb">
+    @Abbott Keine Nadel. Respekt.<br><br>
+    Unser Sensor misst Blutzucker, EKG und Sauerstoffsättigung gleichzeitig.<br>
+    Auch ohne Nadel.<br>
+    Auch ohne App-Abo.<br><br>
+    Kleines Team. Großes Signal. <span class="gn">🟢</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">8.1K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">701</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">3.9K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Selbstironie: Konferenz -->
+<article class="post" data-tags="linkedin selfirony">
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn</span>
+  </div>
+  <div class="mv">
+    <div class="mbox">
+      <div class="mt">MedTech-Konferenz Erfahrungsbericht:</div>
+      <div class="mm" style="font-size:13px;color:#bbb;font-weight:500;line-height:2.1;text-align:left;max-width:100%;">
+        08:30 — Keynote: <span class="gg">„KI verändert alles"</span><br>
+        09:15 — Panel: <span class="gg">„KI verändert alles"</span><br>
+        10:45 — Workshop: <span class="gg">„KI verändert alles"</span><br>
+        12:00 — Mittagessen: <span class="yy">kalt</span><br>
+        13:30 — Roundtable: <span class="gg">„KI verändert alles"</span><br>
+        17:00 — Networking: endlich <span class="gg">echte Gespräche</span>
+      </div>
+      <div class="mb">// Erkenntnis des Tages: KI verändert alles.</div>
+    </div>
+  </div>
+  <div class="pb" style="font-size:13.5px;">
+    Wir haben trotzdem drei neue Klinikpartner gefunden.<br>
+    Beim kalten Mittagessen.<br><br>
+    <span class="bld">Netzwerken funktioniert noch immer analog.</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">44.7K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">5.1K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Selbstironie: Jobbezeichnung -->
+<article class="post" data-tags="twitter selfirony kurz">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Mein offizieller Titel: „Head of Social".<br><br>
+    Was ich wirklich mache:<br>
+    — Bugtickets eskalieren<br>
+    — Kaffee kaufen<br>
+    — Tweets schreiben, die unser CEO nachts liest und nicht schlafen kann<br>
+    — Gelegentlich: Social Media<br><br>
+    Herzlich willkommen bei MedPuls.
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">31.2K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">2.8K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">12.4K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+</div>
+
+<!-- ─── NEU: KÖRPER-FACTS + PATIENTENPERSPEKTIVE ─── -->
+
+<div class="div">HEUTE · 08:05</div>
+
+<!-- Körper-Fakt: Schlaf -->
+<article class="post" data-tags="twitter body kurz">
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X</span>
+  </div>
+  <div class="pb">
+    Während ihr geschlafen habt:<br><br>
+    — Gehirn hat Giftstoffe ausgespült (glymphatisches System)<br>
+    — Leber hat euren Alkohol verarbeitet (ihr wisst schon)<br>
+    — Haut hat sich repariert<br>
+    — Herz hat 35.000 Mal geschlagen<br>
+    — Immunsystem hat still gearbeitet<br><br>
+    Euer Körper hat mehr geleistet als die meisten Meetings heute.<br><br>
+    <span class="bld">Guten Morgen.</span>
+  </div>
+  <div class="tags"><span class="tag">#Schlaf</span><span class="tag">#Körper</span><span class="tag">#MedPuls</span></div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">17.3K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">1.2K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">8.4K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Patientenperspektive: Wartezimmer -->
+<div class="div">HEUTE · 10:20</div>
+<article class="post" data-tags="linkedin selfirony">
+  <div class="ph">
+    <div class="av r">Pa</div>
+    <div class="pm"><div class="pn">Paula M.</div><div class="pr">Patientin · kommentiert bei MedPuls GmbH</div></div>
+    <span class="ptag">LinkedIn · Kommentar</span>
+  </div>
+  <div class="pb">
+    „Ich saß 3 Stunden im Wartezimmer. Dann 4 Minuten beim Arzt. Dann 2 Wochen auf den Befund.<br><br>
+    Mit MedPuls: Befund kam, während ich noch in der Praxis war.<br><br>
+    Ich hab geweint. Aus Erleichterung."
+  </div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">4.1K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="linkedin selfirony">
+  <div class="strip gr">💬 MedPuls antwortet</div>
+  <div class="ph">
+    <div class="av d">MP</div>
+    <div class="pm"><div class="pn">MedPuls GmbH</div><div class="pr">Medical Technology · Berlin</div></div>
+    <span class="ptag">LinkedIn · Reply</span>
+  </div>
+  <div class="pb">
+    Paula.<br><br>
+    Genau dafür machen wir das.<br>
+    Keine Learnings. Keine Metriken.<br>
+    Nur das.<br><br>
+    <span class="bld">Danke.</span> <span class="gn">💚</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">52.8K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">6.3K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Körper-Fakt: Knochen -->
+<div class="div">HEUTE · 12:44</div>
+<article class="post" data-tags="tiktok body">
+  <div class="strip gr">🔥 Viral · 1.1M Views</div>
+  <div class="ph">
+    <div class="av g">@</div>
+    <div class="pm"><div class="pn">@medpuls.de</div><div class="pr">MedPuls auf TikTok · 312K Follower</div></div>
+    <span class="ptag">TikTok</span>
+  </div>
+  <div class="mv">
+    <div class="mbox">
+      <div class="mt">Dinge, die dein Körper kann und du nicht weißt:</div>
+      <div class="mm" style="font-size:13px;color:#ccc;text-align:left;max-width:100%;font-weight:500;line-height:1.9;">
+        🦷 Zähne sind <span class="gg">außen härter als Knochen</span> — heilen sich aber nicht selbst<br>
+        👁️ Augen verarbeiten <span class="gg">10 Mio. Farben</span> — aber nicht Infrarot<br>
+        💪 Zunge ist der <span class="gg">einzige Muskel</span>, der nur an einer Seite befestigt ist<br>
+        🧬 DNS in einer Zelle: <span class="gg">2 Meter lang</span> — zusammengefaltet auf 6 Mikrometer<br>
+        🫁 Lunge entfaltet: <span class="gg">so groß wie ein Tennisplatz</span>
+      </div>
+      <div class="mb">// Evolution: 10/10. Dokumentation: ausbaufähig.</div>
+    </div>
+  </div>
+  <div class="pb" style="font-size:13px;color:var(--muted);">
+    Wir schreiben die Dokumentation nach.<br>
+    <span class="bld" style="color:#111;">Für jeden Körper. In Echtzeit.</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">289K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">9.4K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">61K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Patientenperspektive: Pfleger -->
+<div class="div">GESTERN · 19:11</div>
+<article class="post" data-tags="twitter selfirony">
+  <div class="ph">
+    <div class="av w">KP</div>
+    <div class="pm"><div class="pn">@krankenpfleger_jonas</div><div class="pr">Intensivpfleger · Charité Berlin · sehr müde</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="rpl"><div class="rpl-n">@MedPuls schreibt:</div>Kein Papierkram. Kein Fax. Vitalwerte in Echtzeit.</div>
+  <div class="pb">@MedPuls ich habe heute Nacht 11 Stunden Schicht. Euer Tool hat mir 2 Stunden Dokumentation gespart. Das sind 2 Stunden Schlaf. Ihr habt keine Ahnung was das bedeutet.</div>
+  <div class="eng">
+    <button class="eb"><span class="ei">🤍</span><span class="ec">31.2K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+<article class="post" data-tags="twitter selfirony">
+  <div class="strip gr">💬 MedPuls antwortet · 19.8K Likes</div>
+  <div class="ph">
+    <div class="av g">MP</div>
+    <div class="pm"><div class="pn">MedPuls</div><div class="pr">Head of Social @MedPuls GmbH</div></div>
+    <span class="ptag">X · Reply</span>
+  </div>
+  <div class="pb">
+    @krankenpfleger_jonas Wir haben eine Ahnung.<br><br>
+    Deshalb bauen wir das.<br><br>
+    Gute Nacht. Schlaf gut. <span class="gn">💚</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">19.8K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">1.4K</span></button>
+    <button class="eb"><span class="ei">🔁</span><span class="ec">9.1K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- Körper-Fakt: Herz -->
+<div class="div">GESTERN · 21:00</div>
+<article class="post" data-tags="instagram body">
+  <div class="ph">
+    <div class="av pi">@</div>
+    <div class="pm"><div class="pn">@medpuls.official</div><div class="pr">MedPuls auf Instagram · 89K Follower</div></div>
+    <span class="ptag">Instagram</span>
+  </div>
+  <div class="mv">
+    <div class="mbox" style="min-height:190px;background:linear-gradient(135deg,#0d0010,#1a0030);">
+      <div class="mt">Das Herz — in Zahlen</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:320px;text-align:left;">
+        <div style="border-left:2px solid var(--g);padding-left:10px;"><div style="font-size:20px;font-weight:800;color:#fff;">100.000</div><div style="font-size:9px;color:#555;font-family:'IBM Plex Mono',monospace;margin-top:2px;">SCHLÄGE/TAG</div></div>
+        <div style="border-left:2px solid var(--g);padding-left:10px;"><div style="font-size:20px;font-weight:800;color:#fff;">3 Mrd.</div><div style="font-size:9px;color:#555;font-family:'IBM Plex Mono',monospace;margin-top:2px;">SCHLÄGE EIN LEBEN</div></div>
+        <div style="border-left:2px solid var(--g);padding-left:10px;"><div style="font-size:20px;font-weight:800;color:#fff;">5 L</div><div style="font-size:9px;color:#555;font-family:'IBM Plex Mono',monospace;margin-top:2px;">BLUT PRO MINUTE</div></div>
+        <div style="border-left:2px solid var(--g);padding-left:10px;"><div style="font-size:20px;font-weight:800;color:#fff;">0</div><div style="font-size:9px;color:#555;font-family:'IBM Plex Mono',monospace;margin-top:2px;">TAGE URLAUB</div></div>
+      </div>
+      <div class="mb" style="margin-top:8px;">// kein einziger freier Tag. seit eurer Geburt.</div>
+    </div>
+  </div>
+  <div class="pb" style="font-size:13.5px;">
+    Das Herz braucht keine Motivation.<br>
+    Es macht einfach.<br><br>
+    Wir passen auf, dass es das noch lange tut. 💚<br>
+    <span style="color:var(--muted);font-size:12px;">Doppeltap wenn euer Herz gerade schlägt.</span>
+  </div>
+  <div class="tags">
+    <span class="tag">#Herz</span><span class="tag">#Körper</span><span class="tag">#MedPuls</span><span class="tag">#DigitalHealth</span>
+  </div>
+  <div class="eng">
+    <button class="eb" onclick="lk(this)"><span class="ei">🤍</span><span class="ec">61.2K</span></button>
+    <button class="eb"><span class="ei">💬</span><span class="ec">3.8K</span></button>
+    <button class="eb ml"><span class="ei">↗</span></button>
+  </div>
+</article>
+
+<!-- BOTTOM BAR -->
+<div class="bot">
+  <div>💚</div>
+  <div class="bt">
+    <strong>MedPuls · Kampagne live</strong>
+    <span>37 Billionen Zellen. 1 App. Scheiß auf Follower-Wachstum.</span>
+  </div>
+  <button class="bcta">Demo buchen</button>
+</div>
+
+<script>
+function lk(btn){
+  btn.classList.toggle('liked');
+  const c=btn.querySelector('.ec');
+  let t=c.textContent.trim();
+  const isK=t.endsWith('K'), isM=t.endsWith('M');
+  let n=parseFloat(t.replace(/[KM,]/g,'').replace('.','').replace(',','.'));
+  if(isM) n=Math.round(n*1000000);
+  else if(isK) n=Math.round(n*1000);
+  n+=btn.classList.contains('liked')?1:-1;
+  if(n>=1000000) c.textContent=(n/1000000).toFixed(1)+'M';
+  else if(n>=1000) c.textContent=(n/1000).toFixed(1).replace(/\.0$/,'')+'K';
+  else c.textContent=n.toLocaleString('de');
+  btn.querySelector('.ei').textContent=btn.classList.contains('liked')?'❤️':'🤍';
+}
+
+function filt(tag,btn){
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.post').forEach(p=>{
+    if(tag==='all'){p.style.display='';return;}
+    p.style.display=(p.dataset.tags||'').split(' ').includes(tag)?'':'none';
+  });
+  document.querySelectorAll('.div').forEach(d=>d.style.display=tag==='all'?'':'none');
+  document.querySelectorAll('.strip').forEach(s=>s.style.display=tag==='all'?'':'s'.includes(tag)?'':'');
+}
+
+function vote(opt,total){
+  const poll=opt.closest('.poll');
+  if(poll.dataset.voted) return;
+  poll.dataset.voted='1';
+  const opts=poll.querySelectorAll('.popt');
+  const pcts=[11,18,24,47];
+  opts.forEach((o,i)=>{
+    const np=i===Array.from(opts).indexOf(opt)?pcts[i]+1:pcts[i];
+    o.querySelector('.pbar').style.width=np+'%';
+    o.querySelector('.ppc').textContent=np+'%';
+    o.style.cursor='default';
+  });
+}
+</script>
+
+</body>
+</html>
